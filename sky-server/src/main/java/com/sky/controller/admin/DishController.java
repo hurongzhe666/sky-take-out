@@ -77,11 +77,28 @@ public class DishController {
         return Result.success();
     }
 
+    /**
+     * 根据id查询菜品
+     * @param categoryId
+     * @return
+     */
     @GetMapping("/list")
     @ApiOperation("根据id查询菜品")
     public Result<List<Dish>> list(@RequestParam Long categoryId){
         log.info("根据id查询菜品：{}", categoryId);
         List<Dish> List = dishService.list(categoryId);
         return Result.success(List);
+    }
+    /**
+     * 起售或停售菜品
+     * @param status
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("起售或停售菜品")
+    public Result startOrStop(@PathVariable("status") Integer status,Long id){
+        log.info("起售或停售菜品：{}", status);
+        dishService.startOrStop(status,id);
+        return Result.success();
     }
 }
