@@ -20,4 +20,5 @@
             #{dishId}
         </foreach>
     </select>
+
 </mapper>
