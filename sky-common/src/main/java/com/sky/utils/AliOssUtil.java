@@ -4,9 +4,12 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
+import com.aliyun.oss.model.ObjectMetadata;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.management.ObjectName;
 import java.io.ByteArrayInputStream;
 
 @Data
@@ -32,6 +35,10 @@ public class AliOssUtil {
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
         try {
+            /*// 创建PutObject请求。
+            ObjectMetadata meta = new ObjectMetadata();
+            meta.setContentType(objectName.endsWith(".png") ? "image/png" : "image/jpeg");
+            ossClient.putObject(bucketName, objectName, new ByteArrayInputStream(bytes), meta);*/
             // 创建PutObject请求。
             ossClient.putObject(bucketName, objectName, new ByteArrayInputStream(bytes));
         } catch (OSSException oe) {
