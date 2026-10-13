@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.sky.annotation.AutoFill;
+import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.enumeration.OperationType;
 import io.swagger.annotations.ApiOperation;
@@ -38,10 +39,11 @@ public interface SetmealDishMapper {
     void deleteBySetmealId(Long setmealId);
 
     /**
-     * @param id
+     * @param setmealId
      * @author 根据套餐id查询套餐中的菜品信息
      * @create 2023-04-07 14:42
      */
     @Select("select * from setmeal_dish where setmeal_id = #{setmealId}")
     List<SetmealDish> getSetmealDishesBySetmealId(Long setmealId);
+
 }

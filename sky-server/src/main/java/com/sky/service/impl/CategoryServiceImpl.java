@@ -126,7 +126,8 @@ public class CategoryServiceImpl implements CategoryService {
      * @param type
      * @return
      */
-    public List<Category> list(Integer type) {
+    public List<Category> list(Integer type)
+    {
         return categoryMapper.list(type);
     }
 }

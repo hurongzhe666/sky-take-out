@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -178,4 +179,32 @@ public class DishServiceImpl implements DishService {
         //最后更新菜品数据
         dishMapper.update(dish);
     }
+
+    /**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    public List<DishVO> listWithFlavor(Dish dish) {
+        //根据传进来的数据查询对应的菜品
+        List<Dish> dishList = dishMapper.list(dish);
+        //用来封装前端需要的菜品数据
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        //遍历查出来的菜品和口味数据，封装成DishVO对象
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            //属性拷贝
+            BeanUtils.copyProperties(d, dishVO);
+
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = dishFlavorMapper.getByDishId(d.getId());
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
+    }
+
 }
