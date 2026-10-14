@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +23,20 @@ public class SetmealController {
     @Autowired
     private SetmealService setmealService;
 
+    /**
+     * 新增套餐
+     * @param setmealDTO
+     * @return
+     */
     @PostMapping()
     @ApiOperation("新增套餐")
+    @CacheEvict(cacheNames = "setmealCache",key = "#setmealDTO.categoryId")
     public Result save(@RequestBody SetmealDTO setmealDTO){
         log.info("新增套餐：{}", setmealDTO);
         setmealService.saveWithDish(setmealDTO);
         return Result.success();
     }
+
     /**
      * 套餐分页查询
      * @param setmealPageQueryDTO
@@ -43,8 +51,14 @@ public class SetmealController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 批量删除套餐
+     * @param ids
+     * @return
+     */
     @DeleteMapping
     @ApiOperation("批量删除套餐")
+    @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     public Result deleteBatch(@RequestParam List<Long> ids){
         log.info("批量删除套餐：{}", ids);
         setmealService.deleteBatch(ids);
@@ -64,8 +78,14 @@ public class SetmealController {
         return Result.success(setmealVO);
     }
 
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     * @return
+     */
     @PutMapping
     @ApiOperation("修改套餐")
+    @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     public Result update(@RequestBody SetmealDTO setmealDTO){
         log.info("修改套餐：{}", setmealDTO);
         setmealService.updateWithDish(setmealDTO);
@@ -74,6 +94,7 @@ public class SetmealController {
 
     @PostMapping("/status/{status}")
     @ApiOperation("启售或停售套餐")
+    @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     public Result startOrStop(@PathVariable Integer status,Long id){
         log.info("启动或停止套餐：{}", id);
         setmealService.startOrStop(status,id);
